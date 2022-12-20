@@ -4,19 +4,20 @@
 (setq gc-cons-threshold (* 1024 1024 100))
 
 ;; Set some nice defaults
-(setq-default tab-width 2 ring-bell-function 'ignore       ; prevent beep sound.
-							initial-major-mode 'org-mode
-							initial-scratch-message nil 
-							create-lockfiles nil		                     ; .#locked-file-name
-							confirm-kill-processes nil                   ; exit emacs without asking to kill processes
-							backup-by-copying t				                   ; prevent linked files
-							require-final-newline t	                     ; always end files with newline
-							delete-old-versions t	                       ; don't ask to delete old backup files
-							revert-without-query '(".*")                 ; `revert-buffer' without confirmation
-							use-short-answers t                          ; e.g. `y-or-n-p' instead of `yes-or-no-p'
-							help-window-select t                         ; Select help window so it's easy to quit it with 'q'
-							tab-width 2 inhibit-startup-message t	       ; Don't show the startup message...
-							inhibit-startup-screen t)							       ; ... or screen)
+(setq-default tab-width 2
+	ring-bell-function 'ignore       	; prevent beep sound.
+	initial-major-mode 'org-mode
+	initial-scratch-message nil 
+	create-lockfiles nil             	; .#locked-file-name
+	confirm-kill-processes nil       	; exit emacs without asking to kill processes
+	backup-by-copying t	        	; prevent linked files
+	require-final-newline t			; always end files with newline
+	delete-old-versions t	   	      	; don't ask to delete old backup files
+	revert-without-query '(".*")            ; `revert-buffer' without confirmation
+	use-short-answers t                     ; e.g. `y-or-n-p' instead of `yes-or-no-p'
+	help-window-select t                    ; Select help window so it's easy to quit it with 'q'
+	tab-width 2 inhibit-startup-message t	; Don't show the startup message...
+	inhibit-startup-screen t)	        ; ... or screen)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -35,8 +36,8 @@
 (setq ibuffer-show-empty-filter-groups nil)
 
 (add-hook 'ibuffer-mode-hook '(lambda () 
-																(ibuffer-auto-mode 1) 
-																(ibuffer-switch-to-saved-filter-groups "home")))
+	(ibuffer-auto-mode 1) 
+	(ibuffer-switch-to-saved-filter-groups "home")))
 
 ;; Activate org-mode
 (global-set-key (kbd "C-c l") #'org-store-link)
@@ -141,16 +142,15 @@
 
 ;; Show vterm at bottom of screen when toggled
 (setq vterm-toggle-fullscreen-p nil)
-(add-to-list 'display-buffer-alist '((lambda (buffer-or-name _) 
-																			 (let ((buffer (get-buffer buffer-or-name))) 
-																				 (with-current-buffer buffer (or (equal major-mode
-																																								'vterm-mode) 
-																																				 (string-prefix-p
-																																					vterm-buffer-name
-																																					(buffer-name buffer)))))) 
-																		 (display-buffer-reuse-window display-buffer-at-bottom) 
-																		 (reusable-frames . visible) 
-																		 (window-height . 0.3)))
+(add-to-list 'display-buffer-alist
+	'((lambda (buffer-or-name _)
+	(let ((buffer (get-buffer buffer-or-name)))
+		(with-current-buffer buffer
+		(or (equal major-mode 'vterm-mode)
+			(string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                (display-buffer-reuse-window display-buffer-at-bottom)
+                (reusable-frames . visible)
+                (window-height . 0.3)))
 
 ;; -------------------------------
 ;; Coding: LSP, language modes etc
@@ -208,9 +208,9 @@
 	company 
 	:diminish company-mode 
 	:bind (:map company-active-map
-							("<tab>" . company-complete-selection)) 
+		("<tab>" . company-complete-selection)) 
 	(:map lsp-mode-map 
-				("<tab>" . company-indent-or-complete-common)) 
+		("<tab>" . company-indent-or-complete-common)) 
 	:custom (company-minimum-prefix-length 2) 
 	(company-idle-delay 0.01) 
 	:config)
