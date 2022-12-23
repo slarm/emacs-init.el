@@ -1,4 +1,3 @@
-
 ;; https://emacs.stackexchange.com/questions/34342/is-there-any-downside-to-setting-gc-cons-threshold-very-high-and-collecting-ga
 (setq gc-cons-threshold-original gc-cons-threshold)
 (setq gc-cons-threshold (* 1024 1024 100))
@@ -229,6 +228,7 @@
 
 (use-package 
 	jinja2-mode)
+
 (use-package 
 	ansible 
 	:hook ((yaml-mode . ansible) 
@@ -242,8 +242,8 @@
 	:diminish yas-minor-mode 
 	:config (yas-reload-all))
 
-(use-package 
-	elisp-format)
+;; (use-package 
+;; 	elisp-format)
 
 (add-hook 'org-mode-hook (lambda () 
 													 (setq-local yas/trigger-key [tab]) 
