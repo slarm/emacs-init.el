@@ -2,21 +2,24 @@
 (setq gc-cons-threshold-original gc-cons-threshold)
 (setq gc-cons-threshold (* 1024 1024 100))
 
+;; Hide stuff
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+
 ;; Set some nice defaults
-(setq-default tab-width 2
-	ring-bell-function 'ignore       	; prevent beep sound.
-	initial-major-mode 'org-mode
-	initial-scratch-message nil 
-	create-lockfiles nil             	; .#locked-file-name
-	confirm-kill-processes nil       	; exit emacs without asking to kill processes
-	backup-by-copying t	        	; prevent linked files
-	require-final-newline t			; always end files with newline
-	delete-old-versions t	   	      	; don't ask to delete old backup files
-	revert-without-query '(".*")            ; `revert-buffer' without confirmation
-	use-short-answers t                     ; e.g. `y-or-n-p' instead of `yes-or-no-p'
-	help-window-select t                    ; Select help window so it's easy to quit it with 'q'
-	tab-width 2 inhibit-startup-message t	; Don't show the startup message...
-	inhibit-startup-screen t)	        ; ... or screen)
+(setq-default tab-width 2 ring-bell-function 'ignore       ; prevent beep sound.
+							initial-major-mode 'org-mode
+							initial-scratch-message nil 
+							create-lockfiles nil		                     ; .#locked-file-name
+							confirm-kill-processes nil                   ; exit emacs without asking to kill processes
+							backup-by-copying t				                   ; prevent linked files
+							require-final-newline t	                     ; always end files with newline
+							delete-old-versions t	                       ; don't ask to delete old backup files
+							revert-without-query '(".*")                 ; `revert-buffer' without confirmation
+							use-short-answers t                          ; e.g. `y-or-n-p' instead of `yes-or-no-p'
+							help-window-select t                         ; Select help window so it's easy to quit it with 'q'
+							tab-width 2 inhibit-startup-message t	       ; Don't show the startup message...
+							inhibit-startup-screen t)							       ; ... or screen)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -34,9 +37,9 @@
 (setq ibuffer-expert t)
 (setq ibuffer-show-empty-filter-groups nil)
 
-(add-hook 'ibuffer-mode-hook '(lambda () 
-	(ibuffer-auto-mode 1) 
-	(ibuffer-switch-to-saved-filter-groups "home")))
+(add-hook 'ibuffer-mode-hook #'(lambda () 
+																(ibuffer-auto-mode 1) 
+																(ibuffer-switch-to-saved-filter-groups "home")))
 
 ;; Activate org-mode
 (global-set-key (kbd "C-c l") #'org-store-link)
@@ -54,6 +57,12 @@
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
 (add-hook 'org-shiftright-final-hook 'windmove-right)
 
+;; Make yasnippet work with Org mode:
+(add-hook 'org-mode-hook
+          (lambda ()
+            (setq-local yas/trigger-key [tab])
+            (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand)))
+
 ;; Enable MELPA
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -61,8 +70,6 @@
 ;; Uncomment to upgrade packages
 ;; (when (not package-archive-contents)
 ;;    (package-refresh-contents))
-
-(setq use-package-always-ensure t)
 
 ;; Enable local  packages
 (add-to-list 'load-path "/home/slarm/git/emacs/blink-search/")
@@ -109,12 +116,12 @@
 				 ("C-c q" . 'vr/query-replace)))
 
 ;; Project interaction
-(use-package 
+(use-package
 	projectile 
-	:diminish projectile-mode 
+	:diminish projectile-mode
 	:hook (after-init . projectile-mode) 
 	:bind-keymap ("C-c p" . projectile-command-map) 
-	:init (setq projectile-project-search-path '("~/git")) 
+	:init (setq projectile-project-search-path '(("~/git" . 1) "~/work/" "~/projects/")) 
 	(setq projectile-switch-project-action #'projectile-dired) 
 	:custom (projectile-completion-system 'ido) 
 	(projectile-dynamic-mode-line nil) 
@@ -126,7 +133,7 @@
 	undo-tree 
 	:diminish undo-tree-mode
 	:custom
-	(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")
+	(setq undo-tree-history-directory-alist '("." . "~/.emacs.d/undo"))
 	:config (global-undo-tree-mode))
 
 (use-package 
@@ -141,15 +148,16 @@
 
 ;; Show vterm at bottom of screen when toggled
 (setq vterm-toggle-fullscreen-p nil)
-(add-to-list 'display-buffer-alist
-	'((lambda (buffer-or-name _)
-	(let ((buffer (get-buffer buffer-or-name)))
-		(with-current-buffer buffer
-		(or (equal major-mode 'vterm-mode)
-			(string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-                (display-buffer-reuse-window display-buffer-at-bottom)
-                (reusable-frames . visible)
-                (window-height . 0.3)))
+(add-to-list 'display-buffer-alist #'((lambda (buffer-or-name _) 
+																			 (let ((buffer (get-buffer buffer-or-name))) 
+																				 (with-current-buffer buffer (or (equal major-mode
+																																								'vterm-mode) 
+																																				 (string-prefix-p
+																																					vterm-buffer-name
+																																					(buffer-name buffer)))))) 
+																		 (display-buffer-reuse-window display-buffer-at-bottom) 
+																		 (reusable-frames . visible) 
+																		 (window-height . 0.3)))
 
 ;; -------------------------------
 ;; Coding: LSP, language modes etc
@@ -178,7 +186,7 @@
 	:hook (lsp-mode . lsp-ui-mode))
 
 ;; Bash integration
-(add-hook 'sh-mode-hook #'lsp-deferred)
+(add-hook 'sh-mode-hook 'lsp-deferred)
 
 ;; Python integration
 (use-package 
@@ -207,9 +215,9 @@
 	company 
 	:diminish company-mode 
 	:bind (:map company-active-map
-		("<tab>" . company-complete-selection)) 
+							("<tab>" . company-complete-selection)) 
 	(:map lsp-mode-map 
-		("<tab>" . company-indent-or-complete-common)) 
+				("<tab>" . company-indent-or-complete-common)) 
 	:custom (company-minimum-prefix-length 2) 
 	(company-idle-delay 0.01) 
 	:config)
@@ -228,7 +236,6 @@
 
 (use-package 
 	jinja2-mode)
-
 (use-package 
 	ansible 
 	:hook ((yaml-mode . ansible) 
@@ -236,15 +243,19 @@
 
 ;; Snippets / code templates
 (use-package 
-	yasnippet-snippets)
-(use-package 
 	yasnippet 
-	:diminish yas-minor-mode 
-	:config (yas-reload-all))
+	:hook (prog-mode .  yas-minor-mode))
 
-;; (use-package 
-;; 	elisp-format)
+(use-package 
+	yasnippet-snippets
+	:after yasnippet)
+
+(use-package 
+	elisp-format)
 
 (add-hook 'org-mode-hook (lambda () 
 													 (setq-local yas/trigger-key [tab]) 
 													 (define-key yas/keymap [tab] 'yas/next-field-or-maybe-expand)))
+
+(use-package esup)
+(setq esup-depth 0)
