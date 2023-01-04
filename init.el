@@ -26,6 +26,7 @@
 
 ;; Keep directories clean
 (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -136,6 +137,8 @@
 
 (add-to-list 'load-path "/home/slarm/git/emacs/vterm-toggle/")
 
+(add-to-list 'load-path "/home/slarm/git/emacs/asdf.el/")
+
 (eval-when-compile
   (require 'use-package))
 
@@ -219,6 +222,10 @@
 ;; -------------------------------
 ;; Coding: LSP, language modes etc
 ;; -------------------------------
+
+;; Plug in to asdf-vm
+(use-package asdf
+	:config (asdf-enable))
 
 (use-package elisp-autofmt)
 
