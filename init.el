@@ -24,9 +24,7 @@
  inhibit-startup-message t ; Don't show the startup message...
  inhibit-startup-screen t) ; ... or screen)
 
-;; Keep directories clean
 (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
-(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -89,39 +87,9 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(dracula))
  '(custom-safe-themes
-   '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926"
-     default))
+	 '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" default))
  '(package-selected-packages
-   '(elisp-autofmt
-     go-mode
-     sr-speedbar
-     treemacs-all-the-icons
-     elisp-format
-     json-mode
-     company-ansible
-     auto-complete
-     jinja2-mode
-     ansible
-     yaml-mode
-     all-the-icons-dired
-     vterm-toggle
-     dired-sidebar
-     all-the-icons
-     magit
-     dracula-theme
-     vterm
-     undo-tree
-     yasnippet-snippets
-     lsp-pyright
-     rainbow-delimiters
-     rainbow-mode
-     company-box
-     company
-     projectile
-     use-package
-     lsp-ui
-     dap-mode
-     lsp-mode)))
+	 '(flycheck elisp-autofmt go-mode sr-speedbar treemacs-all-the-icons elisp-format json-mode company-ansible auto-complete jinja2-mode ansible yaml-mode all-the-icons-dired vterm-toggle dired-sidebar all-the-icons magit dracula-theme vterm undo-tree yasnippet-snippets lsp-pyright rainbow-delimiters rainbow-mode company-box company projectile use-package lsp-ui dap-mode lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -231,6 +199,9 @@
 
 (use-package sr-speedbar :bind (("C-c s" . sr-speedbar-toggle)))
 
+(use-package flycheck
+	:init (global-flycheck-mode))
+
 (use-package
  lsp-mode
  :init (setq lsp-keymap-prefix "C-c k")
@@ -244,7 +215,8 @@
  (lsp-lens-enable nil)
  (lsp-disabled-clients '((python-mode . pyls)))
  (setq lsp-pyls-plugins-flake8-enabled t)
- :config)
+ :config
+ (lsp-treemacs-sync-mode 1))
 
 (use-package lsp-ui :hook (lsp-mode . lsp-ui-mode))
 
