@@ -24,6 +24,9 @@
  inhibit-startup-message t ; Don't show the startup message...
  inhibit-startup-screen t) ; ... or screen)
 
+;; Keep directories clean
+(setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 ;; Enable some nice builtin features:
@@ -74,10 +77,58 @@
  'package-archives
  '("melpa" . "https://melpa.org/packages/"))
 
+;; Uncomment to upgrade packages
 ;; (when (not package-archive-contents)
 ;;    (package-refresh-contents))
 
-;; (setq use-package-always-ensure t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(dracula))
+ '(custom-safe-themes
+   '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926"
+     default))
+ '(package-selected-packages
+   '(elisp-autofmt
+     go-mode
+     sr-speedbar
+     treemacs-all-the-icons
+     elisp-format
+     json-mode
+     company-ansible
+     auto-complete
+     jinja2-mode
+     ansible
+     yaml-mode
+     all-the-icons-dired
+     vterm-toggle
+     dired-sidebar
+     all-the-icons
+     magit
+     dracula-theme
+     vterm
+     undo-tree
+     yasnippet-snippets
+     lsp-pyright
+     rainbow-delimiters
+     rainbow-mode
+     company-box
+     company
+     projectile
+     use-package
+     lsp-ui
+     dap-mode
+     lsp-mode)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(setq use-package-always-ensure t)
 
 ;; Enable local  packages
 (add-to-list 'load-path "/home/slarm/git/emacs/blink-search/")
@@ -202,7 +253,7 @@
   (lambda ()
     (require 'lsp-pyright)
     (lsp-deferred))))
-s;; Golang integration
+;; Golang integration
 (add-hook 'go-mode-hook #'lsp-deferred)
 
 ;; Set up before-save hooks to format buffer and add/delete imports.
