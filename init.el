@@ -21,6 +21,7 @@
  use-short-answers t ; e.g. `y-or-n-p' instead of `yes-or-no-p'
  help-window-select t ; Select help window so it's easy to quit it with 'q'
  tab-width 2
+ make-backup-files nil
  inhibit-startup-message t ; Don't show the startup message...
  inhibit-startup-screen t) ; ... or screen)
 
@@ -97,7 +98,7 @@
  ;; If there is more than one, they won't work right.
  )
 
-(setq use-package-always-ensure t)
+;; (setq use-package-always-ensure t)
 
 ;; Enable local  packages
 (add-to-list 'load-path "/home/slarm/git/emacs/blink-search/")
@@ -161,8 +162,9 @@
  undo-tree
  :diminish undo-tree-mode
  :custom
- (setq undo-tree-history-directory-alist
-       '("." . "~/.emacs.d/undo"))
+ (undo-tree-visualizer-diff t)
+ (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+ (undo-tree-visualizer-timestamps t)
  :config (global-undo-tree-mode))
 
 (use-package vterm :ensure t)
@@ -253,7 +255,7 @@
  (:map company-active-map ("<tab>" . company-complete-selection))
  (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
  :custom
- (company-minimum-prefix-length 1)
+ (company-minimum-prefix-length 2)
  (company-idle-delay 0.01)
  :config)
 
