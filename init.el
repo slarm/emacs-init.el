@@ -58,7 +58,8 @@
 
 (setq org-agenda-files (list "~/org/work.org" "~/org/personal.org"))
 
-;; Make windmove (hopefully) work in Org mode:
+;; Make windmove work in Org mode:
+(setq org-replace-disputed-keys t)
 (add-hook 'org-shiftup-final-hook 'windmove-up)
 (add-hook 'org-shiftleft-final-hook 'windmove-left)
 (add-hook 'org-shiftdown-final-hook 'windmove-down)
