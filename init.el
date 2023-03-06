@@ -25,14 +25,14 @@
  inhibit-startup-message t ; Don't show the startup message...
  inhibit-startup-screen t) ; ... or screen)
 
-(setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+(setq backup-directory-alist '(("." . "~/.emacs.d/emacs-backup")))
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 ;; Enable some nice builtin features:
 ;; windmove
-(windmove-default-keybindings)
-(setq windmove-wrap-around t)
+;; (windmove-default-keybindings)
+;; (setq windmove-wrap-around t)
 
 ;; ido
 (ido-mode)
@@ -91,7 +91,7 @@
  '(custom-safe-themes
 	 '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" default))
  '(package-selected-packages
-	 '(flycheck elisp-autofmt go-mode sr-speedbar treemacs-all-the-icons elisp-format json-mode company-ansible auto-complete jinja2-mode ansible yaml-mode all-the-icons-dired vterm-toggle dired-sidebar all-the-icons magit dracula-theme vterm undo-tree yasnippet-snippets lsp-pyright rainbow-delimiters rainbow-mode company-box company projectile use-package lsp-ui dap-mode lsp-mode)))
+	 '(switch-window xclip flycheck elisp-autofmt go-mode sr-speedbar treemacs-all-the-icons elisp-format json-mode company-ansible auto-complete jinja2-mode ansible yaml-mode all-the-icons-dired vterm-toggle dired-sidebar all-the-icons magit dracula-theme vterm undo-tree yasnippet-snippets lsp-pyright rainbow-delimiters rainbow-mode company-box company projectile use-package lsp-ui dap-mode lsp-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -125,13 +125,18 @@
  :commands (dired-sidebar-toggle-sidebar)
  :config (setq dired-sidebar-theme 'icons))
 
+;; Use switch-window instead of windmove
+(require 'switch-window)
+(global-set-key (kbd "C-x o") 'switch-window)
+(setq switch-window-multiple-frames t)
+
 ;; --------------------------
 ;; Productivity enchancements
 ;; --------------------------
 
 (use-package
  which-key
- :diminish which-key-mode
+ :diminish which-key-model
  :config (which-key-mode))
 
 ;; Fuzzy search
